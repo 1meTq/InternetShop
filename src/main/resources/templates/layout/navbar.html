@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #3b745c" xmlns:th="http://www.thymeleaf.org">
+    <a class="navbar-brand" href="#">
+        <strong style="color: whitesmoke">ALL E-SHOP</strong>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{'/'}" th:text="#{label.home}" style="color: whitesmoke"></a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{'/add'}" th:text="#{label.addItem}" style="color: whitesmoke">Add Item</a>
+            </li>
+
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+
+            <a class="nav-link" href="?lng=ru" style="color: whitesmoke" th:text="#{langy.ru}"></a>
+
+            <a class="nav-link" href="?lng=en" style="color: whitesmoke" th:text="#{langy.en}"></a>
+
+            <a class="nav-link" href="?lng=kz" style="color: whitesmoke" th:text="#{langy.kz}"></a>
+
+        </form>
+    </div>
+</nav>

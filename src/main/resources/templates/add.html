@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout">
+<div th:insert="~{layout/main}"></div>
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-sm-6 offset-3">
+            <form th:action="@{'/addItem'}" method="post">
+                <div class="form-group">
+                    <label th:text="#{label.name}">
+                    </label>
+                    <input type="text" class="form-control" name="item_name">
+                </div>
+
+                <div class="form-group">
+                    <label th:text="#{label.description}">
+                    </label>
+                    <textarea class="form-control" name="item_description" rows="5"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label th:text="#{label.price}">
+                    </label>
+                    <input type="number" class="form-control" name="item_price">
+                </div>
+
+                <div class="form-group">
+                    <label th:text="#{label.amount}">
+                    </label>
+                    <input type="number" class="form-control" name="item_amount">
+                </div>
+
+                <div class="form-group">
+                    <label th:text="#{label.stars}">
+                    </label>
+                    <input type="number" class="form-control" name="item_stars">
+                </div>
+
+                <div class="form-group">
+                    <label th:text="#{label.picture}">
+                    </label>
+                    <input type="text" class="form-control" name="item_pictureUrl">
+                </div>
+
+                <button type="submit" class="btn btn-primary" th:text="#{button.add}"></button>
+            </form>
+
+        </div>
+    </div>
+</div>
+<br>
+<!-- Footer -->
+<footer class="page-footer font-small" style="background-color: #3b745c">
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:
+        <a href="https://mdbootstrap.com/" style="color:whitesmoke;"> all-e-shop.com</a>
+    </div>
+    <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+</html>
