@@ -8,22 +8,91 @@
         <div class="col-3">
 
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action" th:text="#{label.allItems}"></a>
-                <a href="#" class="list-group-item list-group-item-action" th:text="#{label.phones}">Phones</a>
-                <a href="#" class="list-group-item list-group-item-action" th:text="#{label.laptops}">Laptops</a>
-                <a href="#" class="list-group-item list-group-item-action" th:text="#{label.watches}">Watches</a>
-                <a href="#" class="list-group-item list-group-item-action"
-                   th:text="#{label.televisions}">Televisions</a>
-                <a href="#" class="list-group-item list-group-item-action" th:text="#{label.console}">Game
-                    Consoles</a>
-                <a href="#" class="list-group-item list-group-item-action" th:text="#{label.other}">Other</a>
-
+                <a class="list-group-item list-group-item-action" style="background-color: #3b745c; color: whitesmoke"
+                   th:text="#{label.categories}"></a>
+                <a href="/allproducts" class="list-group-item list-group-item-action" th:text="#{label.allItems}"></a>
+                <a href="#" class="list-group-item list-group-item-action" th:text="#{label.smartphones_gadgets}"></a>
+                <a href="#" class="list-group-item list-group-item-action" th:text="#{label.tv_audio_video}"></a>
+                <a href="#" class="list-group-item list-group-item-action" th:text="#{label.gamers}"></a>
+                <a href="#" class="list-group-item list-group-item-action" th:text="#{label.other}"></a>
             </div>
+            <br>
+            <div class="list-group">
+                <a class="list-group-item list-group-item-action" style="background-color: #3b745c; color: whitesmoke"
+                   th:text="#{label.brands}"></a>
+                <a href="#" class="list-group-item list-group-item-action">Apple</a>
+                <a href="#" class="list-group-item list-group-item-action">Samsung</a>
+                <a href="#" class="list-group-item list-group-item-action">LG</a>
+                <a href="#" class="list-group-item list-group-item-action">BOSCH</a>
+                <a href="#" class="list-group-item list-group-item-action">ZEPTER</a>
+                <a href="#" class="list-group-item list-group-item-action">XIAOMI</a>
+                <a href="#" class="list-group-item list-group-item-action">NOKIA</a>
+                <a href="#" class="list-group-item list-group-item-action" th:text="#{label.other}"></a>
+            </div>
+            <br>
+            <div class="list-group">
+                <a class="list-group-item list-group-item-action" style="background-color: #3b745c; color: whitesmoke"
+                   th:text="#{label.payments}"></a>
+                <table>
+                    <tr>
+                        <td style="padding-left: 15px">
+                            <img th:src="@{'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/23_Apple_Pay_Credit_Card_logo_logos-512.png'}"
+                                 style="width: 65px;height: 65px">
+                        </td>
+
+                        <td>
+                            <img th:src="@{'https://www.flaticon.com/svg/static/icons/svg/61/61555.svg'}"
+                                 style="width: 65px;height: 65px">
+                        </td>
+
+                        <td>
+                            <img th:src="@{'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQmQGqSeaEBVcM3fNCHm9e9wxm23sCza8jdgg&usqp=CAU'}"
+                                 style="width: 65px;height: 65px">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding-left: 15px">
+                            <img th:src="@{'https://epicpay.com/wp-content/uploads/2019/12/EpicPayLogoWhite_1200x630.png'}"
+                                 style="width: 65px;height: 65px">
+                        </td>
+                        <td>
+                            <img th:src="@{'https://thumbor.forbes.com/thumbor/711x512/https://blogs-images.forbes.com/steveolenski/files/2016/07/Mastercard_new_logo-1200x865.jpg?width=960'}"
+                                 style="width: 65px;height: 65px">
+                        </td>
+                        <td>
+                            <img th:src="@{'https://www.conviva.com/wp-content/uploads/2020/02/american-express.png'}"
+                                 style="width: 65px;height: 65px">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
         </div>
 
-        <div class="col-9">
+        <div class="col-8">
 
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <div class="form-group">
+                <form th:action="@{'/search'}" method="get">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-10">
+
+                                <input class="form-control" type="text" placeholder="Enter to search..." name="name">
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-info" style="background-color: #3b745c; color: whitesmoke"
+                                        type="submit">Search
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height: 500px">
                 <ol class="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -53,46 +122,45 @@
                 </a>
             </div>
 
-            <br>
-            <br>
-
-            <table>
-                <tr>
-                    <td th:each="it : ${items}" style="padding-left: 20px">
-                        <div class="card" style="width: 16rem">
-                            <img th:src="${it.getPictureUrl()}"
-                                 class="card-img-top" alt="..." style="width: 254px;height: 150px">
+            <div class="container">
+                <div class="row">
+                    <div class="col-4" th:each="it : ${tovary}" style="width: 230px; height: 400px">
+                        <div class="card" style="width: 210px; height: 350px">
+                            <img th:src="${it.getSmallPicUrl()}"
+                                 class="card-img-top" alt="..." style="width: 209px;height: 150px">
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${it.getName()}"></h5>
+                                <a th:href="@{'/details/' + ${it.getId()}}"><h5 class="card-title"
+                                                                                th:text="${it.getName()}"></h5></a>
+                                <h6 th:text="${'$' + it.getPrice()}"></h6>
                                 <p class="card-text" th:text="${it.getDescription()}"></p>
                             </div>
                             <div class="card-footer">
                                 <small class="text-muted" th:text="${it.getStars()}"></small>
                             </div>
                         </div>
-                    </td>
-
-                </tr>
-            </table>
-        </div>
-
-    </div>
-    <br>
-    <div class="container">
-        <div class="row mt-3">
-            <div class="col">
-                <footer class="page-footer font-small" style="background-color: #3b745c">
-
-                    <!-- Copyright -->
-                    <div class="footer-copyright text-center py-3">© 2020 Copyright:
-                        <a href="https://mdbootstrap.com/" style="color: whitesmoke"> all-e-shop.com</a>
                     </div>
-                    <!-- Copyright -->
-                </footer>
+                    <br>
+                </div>
+            </div>
+
+
+        </div>
+        <br>
+        <div class="container">
+            <div class="row mt-3">
+                <div class="col">
+                    <footer class="page-footer font-small" style="background-color: #3b745c">
+
+                        <!-- Copyright -->
+                        <div class="footer-copyright text-center py-3">© 2020 Copyright:
+                            <a href="https://mdbootstrap.com/" style="color: whitesmoke"> all-e-shop.com</a>
+                        </div>
+                        <!-- Copyright -->
+                    </footer>
+                </div>
             </div>
         </div>
+
     </div>
-
 </div>
-
 </html>

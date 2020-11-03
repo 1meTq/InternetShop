@@ -7,6 +7,7 @@
     <div class="row mt-5">
         <div class="col-sm-6 offset-3">
             <form th:action="@{'/addItem'}" method="post">
+                <h2 class="text-center">Add Item Page</h2>
                 <div class="form-group">
                     <label th:text="#{label.name}">
                     </label>
@@ -26,15 +27,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label th:text="#{label.amount}">
-                    </label>
-                    <input type="number" class="form-control" name="item_amount">
-                </div>
-
-                <div class="form-group">
                     <label th:text="#{label.stars}">
                     </label>
                     <input type="number" class="form-control" name="item_stars">
+                </div>
+
+                <div class="form-group">
+                    <label th:text="#{label.in_top_page}"></label><br>
+                    <input type="radio" name="item_in_top_page" value="yes">Yes
+                    <input type="radio" name="item_in_top_page" value="no">No<br>
                 </div>
 
                 <div class="form-group">
