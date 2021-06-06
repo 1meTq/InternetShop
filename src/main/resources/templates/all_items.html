@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/adminpanel_main.html">
+<div layout:fragment="admin_panel">
+    <div class="container">
+        <div class="row">
+            <div class="col-9">
+                <h1>ALL ITEMS</h1>
+            </div>
+            <div class="col-3" align="right">
+                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addItem" th:text="#{label.addItem}"></button>
+            </div>
+            <!-- Button trigger modal -->
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="addItem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel" th:text="#{label.addItem}"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form th:action="@{'/addItem'}" method="post">
+                            <div class="modal-body">
+                                <h2 class="text-center" th:text="#{label.addItemPage}">Add Item Page</h2>
+                                <div class="form-group">
+                                    <label th:text="#{label.name}">
+                                    </label>
+                                    <input type="text" class="form-control" name="item_name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label th:text="#{label.description}">
+                                    </label>
+                                    <textarea class="form-control" name="item_description" rows="5"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label th:text="#{label.price}">
+                                    </label>
+                                    <input type="number" class="form-control" name="item_price">
+                                </div>
+
+                                <div class="form-group">
+                                    <label th:text="#{label.stars}">
+                                    </label>
+                                    <input type="number" class="form-control" name="item_stars" min="1" max="5">
+                                </div>
+
+                                <div class="form-group">
+                                    <label th:text="#{label.in_top_page}"></label><br>
+                                    <input type="radio" name="item_in_top_page" value="yes" th:text="#{label.yes}">
+                                    <input type="radio" name="item_in_top_page" value="no" th:text="#{label.no}"><br>
+                                </div>
+
+                                <div class="form-group">
+                                    <label th:text="#{label.picture}">
+                                    </label>
+                                    <input type="text" class="form-control" name="item_pictureUrl">
+                                </div>
+
+                                <div class="form-group">
+                                    <label th:text="#{label.brand}">
+                                    </label>
+                                    <select class="form-control" name="brandId">
+                                        <option th:each="b : ${brands}" th:text="${b.getName()}"
+                                                th:value="${b.getId()}"></option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{button.close}">Close</button>
+                                <button type="submit" class="btn btn-success" th:text="#{button.add}"></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th style="width: 100px">
+                    <label>
+                        ID
+                    </label>
+                </th>
+                <th style="width: 350px">
+                    <label th:text="#{label.name}"></label>
+                </th>
+                <th style="width: 200px">
+                    <label th:text="#{label.brand}">
+                        Brand
+                    </label>
+                </th>
+                <th style="width: 200px">
+                    <label th:text="#{label.price}">
+                        Price
+                    </label>
+                </th>
+                <th style="width: 100px">
+                    <label th:text="#{label.details}">
+                        Details
+                    </label>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="it : ${items}">
+                <td style="width: 100px">
+                    <label th:text="${it.getId()}">
+                    </label>
+                </td>
+                <td style="width: 350px">
+                    <label th:text="${it.getName()}">
+
+                    </label>
+                </td>
+                <td style="width: 200px">
+                    <label th:text="${it.getBrands().getName()} + ',' + ${it.getBrands().getCountry().getCode()}">
+
+                    </label>
+                </td>
+                <td style="width: 200px">
+                    <label th:text="'$' + ${it.getPrice()}">
+
+                    </label>
+                </td>
+                <td style="width: 100px">
+                    <a th:href="@{'/edit_items/' + ${it.getId()}}">
+                        <button class="btn btn-dark">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</html>

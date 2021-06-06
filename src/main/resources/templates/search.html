@@ -1,0 +1,106 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/main.html">
+
+<div class="col-9" layout:fragment="site_name">
+    <div class="form-group">
+        <form th:action="@{'/search'}" method="get">
+            <div class="container">
+                <div class="row">
+                    <div class="col-3">
+                        <label th:text="#{label.name} + ': '">
+                        </label>
+                        <input class="form-control" type="text" placeholder="Enter to search..." name="name"
+                               th:value="${name!='No name' ? name : ''}">
+                        <br>
+                        <h4 th:text="#{label.searchResults}"></h4>
+                    </div>
+
+                    <div class="col-2">
+                        <label th:text="#{label.brand} + ': '">
+                        </label>
+                        <select class="form-control" name="brand">
+                            <option></option>
+                            <option th:each="b : ${brands}" th:value="${b.getId()}" th:text="${b.getName()}"
+                                    th:selected="${brand==b.getId()}"></option>
+                        </select>
+                        <br>
+                    </div>
+
+                    <div class="col-2">
+                        <label th:text="#{label.priceFrom}">
+                            Price from:
+                        </label>
+                        <input class="form-control" type="text" name="price_from" th:value="${price_from}">
+                        <br>
+                    </div>
+
+                    <div class="col-2">
+                        <label th:text="#{label.priceTo}">
+                            Price to:
+                        </label>
+                        <input class="form-control" type="text" name="price_to" th:value="${price_to}">
+                        <br>
+                        <p th:text="#{label.orderByPrice}">Order by price:</p>
+                    </div>
+
+                    <div class="col-3" style="padding-top: 7px">
+                        <br>
+                        <button class="btn btn-secondary" style="background-color: #3b745c; color: whitesmoke"
+                                type="submit" th:text="#{label.search}">
+                        </button>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-scope">
+                                <input class="btn btn-secondary btn-sm" type="submit" name="order"
+                                       style="background-color: whitesmoke; color: black"
+                                       th:value="${'Ascending'}">
+                            </div>
+                            <div class="col-scope">
+                                <input class="btn btn-secondary btn-sm" type="submit" name="order"
+                                       style="background-color: black"
+                                       th:value="${'Descending'}">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-4" th:each="it : ${tovary}" style="width: 230px; height: 450px">
+                <div class="card" style="width: 210px; height: 400px">
+                    <img th:src="${it.getSmallPicUrl()}"
+                         class="card-img-top" alt="..." style="width: 209px;height: 150px">
+                    <div class="card-body">
+                        <a th:href="@{'/details/' + ${it.getId()}}"><h5 class="card-title"
+                                                                        th:text="${it.getName()}"></h5></a>
+                        <h6 th:text="${'$' + it.getPrice()}"></h6>
+                        <p class="card-text" th:text="${it.getDescription()}"></p>
+                        <h6><span th:text="#{label.brand} + ': ' "></span><a
+                                th:href="${'/search?brand=' + it.getBrands().getId()}"
+                                th:text="${it.getBrands().getName() + ',' + it.getBrands().getCountry().getCode()}"></a>
+                        </h6>
+
+                    </div>
+                    <div class="card-footer">
+
+                                   <span th:each="star : ${#numbers.sequence(1,it.getStars()/1)}" th:text="${'⭐'}">
+                                   </span>
+
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+
+
+</div>
+<br>
+
+</html>

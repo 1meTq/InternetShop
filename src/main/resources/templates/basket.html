@@ -1,0 +1,180 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/main.html"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div class="col-8" layout:fragment="site_name">
+
+    <div class="card">
+        <div class="card-header">
+            <h3 th:text="#{label.basket}"></h3>
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+
+                <table class="table-striped">
+                    <thead>
+                    <tr>
+                        <th style="width: 300px" th:text="#{label.item}"></th>
+                        <th style="width: 200px" th:text="#{label.price}"></th>
+                        <th style="width: 100px" th:text="#{label.amount}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="it : ${items}">
+                        <td style="width: 300px">
+                            <label th:text="${it.getName()}">
+                            </label>
+                        </td>
+                        <td style="width: 200px" th:text="'$' + ${it.getPrice()}"></td>
+                        <td style="width: 100px" th:text="${itemsCount.get(it.getId())}"></td>
+                        <td>
+
+                            <a th:href="${'/addBasket?item_id=' + it.getId()}" type="button"
+                               class="btn btn-success">+</a>
+                            <a th:href="${'/deleteItemFromBasket?item_id=' + it.getId()}" type="button"
+                               class="btn btn-danger">-</a>
+
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+                <hr>
+                <footer>
+                    <div class="row">
+                        <div class="col-6">
+                            <h4><span th:text="#{label.total}"></span> : <strong th:text="${'$' + itemsTotalPrice}"></strong></h4>
+                        </div>
+                        <div class="col-6">
+
+                            <button type="button" class="btn btn-dark" data-toggle="modal"
+                                    data-target="#checkin">
+                                <i class="far fa-credit-card"></i>
+                                <span th:text="#{button.checkin}"></span>
+                            </button>
+                            <button type="button" class="btn btn-danger " data-toggle="modal"
+                                    data-target="#clear">
+                                <i class="fas fa-trash"></i>
+                                <span th:text="#{button.clear}"></span>
+                            </button>
+
+                        </div>
+                        <!--                        <div class="col-3">-->
+                        <!--                            <form>-->
+                        <!--                                <a th:href="${'/clearBasket'}" type="button" class="btn btn-danger">CLEAR BASKET</a>-->
+                        <!--                            </form>-->
+                        <!--                        </div>-->
+
+
+                    </div>
+
+                </footer>
+            </blockquote>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="checkin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+
+                        <i style="font-size: 2em;" class="fab fa-apple-pay"></i>
+
+                        <i style="font-size: 2em;" class="fab fa-cc-visa"></i>
+
+                        <i style="font-size: 2em;" class="fab fa-cc-paypal"></i>
+
+                        <i style="font-size: 2em;" class="fab fa-cc-amazon-pay"></i>
+
+                        <i style="font-size: 2em;" class="fab fa-cc-amex"></i>
+
+                        <i style="font-size: 2em;" class="fab fa-cc-mastercard"></i>
+
+
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>
+                            Full Name
+                            <span style="color: red">*</span>
+                        </label>
+                        <input type="text" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Card Number
+                            <span style="color: red">*</span>
+                        </label>
+                        <input type="card" class="form-control" maxlength="16" required>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-6">
+                                <label>
+                                    Expiration (MM/YY)
+                                    <span style="color: red">*</span>
+                                </label>
+                                <input type="text" class="form-control" required>
+                            </div>
+
+                            <div class="col-6">
+                                <label>
+                                    CVV
+                                    <span style="color: red">*</span>
+                                </label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{button.close}">
+                    </button>
+                    <a th:href="${'/clearBasket'}" type="button" class="btn btn-success" th:text="#{button.pay}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="clear" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2"><p th:text="#{button.clear}"></p></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4>Are you sure?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{button.close}">
+                        Close
+                    </button>
+                    <a th:href="${'/clearBasket'}" type="button" class="btn btn-danger" th:text="#{button.clear}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/main.html"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div class="col-8" layout:fragment="site_name">
+
+
+    <div class="card mb-3" th:value="${item}">
+        <img th:src="${item.getLargePicUrl()}" class="card-img-top" alt="..."
+             style="width: 100%">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${item.getName()}"></h5>
+            <p class="card-text" th:text="${item.getDescription()}"></p>
+            <h6 th:text="'$' + ${item.getPrice()}"></h6>
+            <!--                    <h6 th:text="${'Brand: ' + item.getBrands().getName() + ',' + item.getBrands().getCountry().getCode}"></h6>-->
+
+            <h6><span th:text="#{label.brand} + ': ' "></span><a
+                    th:href="${'/search?brand=' + item.getBrands().getId()}"
+                    th:text="${item.getBrands().getName() + ',' + item.getBrands().getCountry().getCode()}"></a>
+            </h6>
+            <p class="card-text"><small class="text-muted"
+                                        th:text="${'Added date: ' + item.getAddedDate()}"></small></p>
+
+
+        </div>
+
+        <!--        Full size picture-->
+        <div id="picDiv">
+            <div class="col-6 offset-3" th:if="${fullPicture!=null}">
+                <img th:src="@{'/viewItemPicture/' + ${fullPicture.getUrl()}}" class="my-1"
+                     style="width: 100%;">
+            </div>
+        </div>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-2" th:each="pic : ${pictures}">
+
+                    <a th:if="${pic.getItem().getId().equals(item.getId())}"
+                       th:href="@{'/details/' + ${item.getId()} + '?pic_id=' + ${pic.getId()}}">
+                        <img th:src="@{'/viewItemPicture/' + ${pic.getUrl()}}" class="my-1"
+                             style="width: 100%;">
+                    </a>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="card-footer">
+                    <span th:each="star : ${#numbers.sequence(1,item.getStars()/1)}"
+                          th:text="${'⭐'}"></span>
+        </div>
+    </div>
+
+    <br>
+
+    <form th:action="@{'/addBasket'}" method="get">
+        <input type="hidden" name="item_id" th:value="${item.getId()}">
+        <button class="btn btn-success" type="submit">
+            <i class="fas fa-shopping-basket"></i>  Add To Basket
+        </button>
+    </form>
+
+    <br>
+    <br>
+
+
+    <form th:action="${'/addComment'}" sec:authorize="isAuthenticated()" method="post">
+
+        <input type="hidden" name="item_id" th:value="${item.getId()}">
+        <input type="hidden" name="user_id" th:value="${currentUser.getId()}">
+
+        <div class="form-group">
+            <textarea class="form-control" name="comment" rows="3"></textarea>
+        </div>
+
+        <button class="btn btn-primary float-right" type="submit"> <i class="fas fa-comment"></i>  Add Comment</button>
+
+    </form>
+
+
+    <br>
+    <br>
+    <br>
+
+    <div class="container" id="commentsDiv">
+        <div class="row">
+            <div class="col-12">
+                <div class="row border" th:each="c : ${comments}">
+                    <div class="col-9">
+                        <p>
+                        <h3 th:text="${c.getAuthor().getFullName()}"></h3></p>
+                        <p><h5 style="color: gray" th:text="${c.getComment()}"></h5></p>
+                    </div>
+                    <div class="col-3" align="right">
+                        <span th:text="${c.getAddedDate()}"></span>
+                        <!--                              <input class="abay" type="hidden" th:id="'c_id' + ${c.id}" name="" th:value="${c.id}">
+                                                      <input class="roha" type="hidden" th:id="'c_com' + ${c.id}" name="" th:value="${c.comment}">
+
+                              <button type="button" class="btn btn-dark" data-toggle="modal" id="editComment"
+                                      th:attr="data-cid=${c.getId()},data-ccom=${c.getComment()}" data-target="#Edit">
+                                  Edit
+                              </button>
+
+                              <button onclick="myFunction()">Click me</button>
+      -->
+
+                        <!--<div class="col" align="right" th:if="${c.getAuthor().equals(currentUser)}">
+                            <button type="button" class="btn btn-dark float-right" data-toggle="modal" data-target="#editModal"
+                                    th:attr="data-id=${c.getId()},data-com=${c.getComment()}">
+                                Edit
+                            </button>
+                        </div>
+
+                        <div class="col" align="right" th:if="${c.getAuthor().equals(currentUser)}">
+                            <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteModal">
+                                Delete
+                            </button>
+                        </div>
+
+                        <div class="col" align="right" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')"
+                             th:if="${!c.getAuthor().equals(currentUser)}">
+                            <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteModal">
+                                Delete
+                            </button>
+                        </div>-->
+                        <div class="row">
+                            <div class="col">
+
+                                <button th:if="${c.getAuthor().equals(currentUser)}" type="button"
+                                        class="btn btn-dark " data-toggle="modal" data-target="#editModal"
+                                        th:attr="data-id=${c.getId()},data-com=${c.getComment()}">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+
+                                <button th:if="${c.getAuthor().equals(currentUser)}" type="button"
+                                        class="btn btn-danger" data-toggle="modal"
+                                        data-target="#deleteModal" th:attr="data-delid=${c.getId()}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+
+                                <button sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')"
+                                        th:if="${!c.getAuthor().equals(currentUser)}" type="button"
+                                        class="btn btn-danger" data-toggle="modal"
+                                        data-target="#deleteModal" th:attr="data-delid=${c.getId()}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--<script>
+
+            /*function editComment(){
+                alert("Abay");
+                 // $('#com_id').val($('#c_id').val());
+                 // $('#com_com').val($('#c_com').val());
+                 $('#com_id').val(id);
+                 $('#com_com').val(com);
+
+             }*/
+
+            $('#editModal').on('show.bs.modal', function (event) {
+
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var modal = $(this);
+
+                modal.find('#id').val(id);
+
+                //modal.find('.modal-body textarea.com')
+
+
+            })
+
+
+            function myFunction() {
+                alert("Hello World!");
+            }
+
+            $('#editModal2').click(function (event2) {
+
+                var button = $(event2.relatedTarget);
+                var id = button.data('cid');
+                var com = button.data('ccom');
+
+
+                alert(com);
+            });
+
+        </script>-->
+
+
+        <!--<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <form th:action="${'/editComment'}" method="post">
+
+                        <div class="modal-body">
+                            <input type="hidden" name="item_id" th:value="${item.getId()}">
+                            <input type="text" id="id" >
+                            <div class="form-group">
+                                <textarea class="form-control" name="comment" rows="3"></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                            </button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>-->
+
+
+        <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" th:attr="data-id=${comments.get(1).getComment()}">-->
+        <!--        Launch demo modal-->
+        <!--    </button>-->
+
+        <!-- EDIT MODAl -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form th:action="@{'/editComment'}" method="post">
+                        <div class="modal-body">
+
+                            <input type="hidden" name="item_id" th:value="${item.getId()}">
+                            <input type="hidden" id="id" name="com_id">
+
+                            <div class="form-group">
+                                <textarea class="form-control" id="com" name="comment" rows="3"></textarea>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- DELETE MODAl -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2" >Delete comment : </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form th:action="@{'/deleteComment'}" method="post">
+                        <div class="modal-body">
+
+                            <input type="hidden" name="item_id" th:value="${item.getId()}">
+                            <input type="hidden" id="delid" name="com_id">
+
+                            <h4>Are you sure?</h4>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            $('#editModal').on('show.bs.modal', function (event) {
+
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var com = button.data('com');
+
+                var modal = $(this);
+                modal.find('#id').val(id);
+                modal.find('#com').val(com);
+
+            })
+
+
+            $('#deleteModal').on('show.bs.modal', function (event) {
+
+                var button = $(event.relatedTarget);
+                var delid = button.data('delid');
+
+                var modal = $(this);
+                modal.find('#delid').val(delid);
+
+            })
+
+        </script>
+
+        <!--<div class="container">
+            <table>
+                <tbody>
+
+                <tr th:each="com : ${comments}">
+                    <td scope="col">
+                        <div class="col-12">
+                            <div class="row border" th:if="${item.equals(com.getItems())}">
+
+
+                                <div class="col">
+                                    <h3 th:text="${com.getAuthor().getFullName()}"></h3>
+                                    <h5 th:text="${com.getComment()}" style="color: gray"></h5>
+                                </div>
+
+
+                                <div class="col" align="right">
+                                    <h6 th:text="${com.getAddedDate()}" style="color: darkgray"></h6>
+
+                                    <div sec:authorize="isAuthenticated()" th:if="${com.getAuthor().equals(currentUser)}">
+                                        <button type="button" class="btn btn-dark" data-toggle="modal"
+                                                data-target="#Edit">
+                                            Edit
+                                        </button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#Delete">
+                                            Delete
+                                        </button>
+
+                                        &lt;!&ndash;                            Edit&ndash;&gt;
+                                        <div class="modal fade" id="Edit" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Edit comment</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <form th:action="@{'/editComment'}" method="post">
+                                                        <div class="modal-body">
+                                                            <input type="hidden" name="comment_id"
+                                                                   th:value="${com.getId()}">
+                                                            <input type="hidden" name="item_id"
+                                                                   th:value="${com.getItems().getId()}">
+                                                            <input type="hidden" name="user_id"
+                                                                   th:value="${com.getAuthor().getId()}">
+                                                            <div class="form-group">
+                                            <textarea class="form-control" name="comment" th:text="${com.getComment()}"
+                                                      rows="3"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">
+                                                                Close
+                                                            </button>
+                                                            <button type="submit" class="btn btn-primary">Save changes
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+
+                </tbody>
+            </table>
+        </div>-->
+
+        <!--<div class="container">
+            <div class="row">
+                <div class="col-12" th:each="com : ${comments}">
+                    <div class="row border" th:if="${item.equals(com.getItems())}">
+
+                        <div class="col">
+                            <h3 th:text="${com.getAuthor().getFullName()}"></h3>
+                            <h5 th:text="${com.getComment()}" style="color: gray"></h5>
+
+                        </div>
+
+                        <div class="col" align="right">
+                            <h6 th:text="${com.getAddedDate()}" style="color: darkgray"></h6>
+
+                            <div class="row">
+                                <div align="right" th:if="${com.getAuthor().equals(currentUser)}">
+                                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#Edit">
+                                        Edit
+                                    </button>
+
+                                    &lt;!&ndash;                    Edit&ndash;&gt;
+                                    <div class="modal fade" id="Edit" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit comment</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form th:action="@{'/editComment'}" method="post">
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="comment_id" th:value="${com.getId()}">
+                                                        <input type="hidden" name="item_id" th:value="${item.getId()}">
+                                                        <input type="hidden" name="user_id" th:value="${com.getAuthor().getId()}">
+                                                        <div class="form-group">
+                                                    <textarea class="form-control" name="comment"
+                                                              th:text="${com.getComment()}"
+                                                              rows="3"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                                        </button>
+                                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div align="right" th:if="${com.getAuthor().equals(currentUser)}">
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#Delete">
+                                        Delete
+                                    </button>
+                                </div>
+
+                                <div align="right" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')" th:if="${!com.getAuthor().equals(currentUser)}">
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#Delete">
+                                        Delete
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+    </div>
+
+</div>
+</html>

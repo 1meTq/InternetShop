@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/adminpanel_main.html">
+<div layout:fragment="admin_panel">
+    <div class="container">
+        <div class="row">
+            <div class="col-9">
+                <h1>ALL BRANDS</h1>
+            </div>
+            <div class="col-3" align="right">
+                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addBrand">
+                    + Add New Brand
+                </button>
+            </div>
+            <!-- Button trigger modal -->
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="addBrand" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel" th:text="#{label.addBrandPage}"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form th:action="@{'/addbrand'}" method="post">
+                            <div class="modal-body">
+                                <h2 class="text-center" th:text="#{label.addBrandPage}"></h2>
+
+                                <div class="form-group">
+                                    <label th:text="#{label.name}">
+                                    </label>
+                                    <input type="text" class="form-control" name="name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label th:text="#{label.addCountry}">
+                                    </label>
+                                    <select class="form-control" name="country_id">
+                                        <option th:each=" c : ${countries}"
+                                                th:text="${c.getName()} + '/' + ${c.getCode()}"
+                                                th:value="${c.getId()}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{button.close}">Close</button>
+                                <button type="submit" class="btn btn-primary" th:text="#{button.add}"></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th style="width: 100px">
+                    <label>
+                        ID
+                    </label>
+                </th>
+                <th style="width: 250px">
+                    <label th:text="#{label.name}">
+                        NAME
+                    </label>
+                </th>
+                <th style="width: 300px">
+                    <label th:text="#{label.country}">COUNTRY</label>
+                </th>
+
+                <th style="width: 100px">
+                    <label th:text="#{label.details}">Details</label>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="b : ${brands}">
+                <td style="width: 100px">
+                    <label th:text="${b.getId()}"></label>
+                </td>
+                <td style="width: 250px">
+                    <label th:text="${b.getName()}"></label>
+                </td>
+                <td style="width: 200px">
+                    <label th:text="${b.getCountry().getName()} + ', ' + ${b.getCountry().getCode()}">
+
+                    </label>
+                </td>
+                <td style="width: 100px">
+                    <button class="btn btn-dark">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</html>

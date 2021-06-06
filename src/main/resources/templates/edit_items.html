@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/adminpanel_main.html">
+<div layout:fragment="admin_panel">
+    <div class="container">
+        <div class="row">
+            <div class="col-10">
+                <!--ADD-->
+                <form th:action="@{'/saveitem'}" method="post">
+                    <h2 align="left" th:text="${item.getName()}"></h2>
+                    <input type="hidden" name="id" th:value="${item.getId()}">
+                    <div class="form-group">
+                        <label th:text="#{label.name}">
+                        </label>
+                        <input type="text" class="form-control" name="item_name" th:value="${item.getName()}">
+                    </div>
+
+                    <div class="form-group">
+                        <label th:text="#{label.description}">
+                        </label>
+                        <textarea class="form-control" name="item_description" rows="5"
+                                  th:text="${item.getDescription()}"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:text="#{label.price}">
+                        </label>
+                        <input type="number" class="form-control" name="item_price" th:value="${item.getPrice()}">
+                    </div>
+
+                    <div class="form-group">
+                        <label th:text="#{label.stars}">
+                        </label>
+                        <input type="number" class="form-control" name="item_stars" th:value="${item.getStars()}"
+                               min="1" max="5">
+                    </div>
+
+                    <div class="form-group">
+                        <label th:text="#{label.in_top_page}"></label><br>
+                        <input type="radio" name="item_in_top_page" value="Yes" th:text="#{label.yes}">
+                        <input type="radio" name="item_in_top_page" value="No" th:text="#{label.no}"><br>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:text="#{label.picture}">
+                        </label>
+                        <input type="text" class="form-control" name="item_pictureUrl"
+                               th:value="${item.getLargePicUrl()}">
+                    </div>
+
+                    <div class="form-group">
+                        <label th:text="#{label.brand}">
+                        </label>
+                        <select class="form-control" name="brandId">
+                            <option th:each="b : ${brands}" th:text="${b.getName()}" th:value="${b.getId()}"
+                                    th:selected="${b!=null&&b.getId()==item.getBrands().getId()}"></option>
+                        </select>
+                    </div>
+                    <div align="right">
+                        <button type="submit" class="btn btn-success" th:text="#{button.save}"></button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
+                                th:text="#{button.delete}"></button>
+                    </div>
+                </form>
+
+                <!--ASSIGN CATEGORY-->
+                <div id="categoriesDiv">
+                    <h2 th:text="#{label.categories}"></h2>
+                    <table class="table table-hover">
+
+                        <tr th:each="cat : ${categories}">
+                            <div th:if="${!item.getCategories().contains(cat)}">
+                                <form th:action="@{'/assignCategories'}" method="post">
+                                    <input type="hidden" name="item_id" th:value="${item.getId()}">
+                                    <input type="hidden" name="cat_id" th:value="${cat.getId()}">
+                                    <td style="width: 200px">
+                                        <label th:text="${cat.getName()}">
+                                        </label>
+                                    </td>
+
+                                    <td style="width: 300px;">
+                                        <label th:text="${cat.getLogoUrl()}">
+                                        </label>
+                                    </td>
+
+
+                                    <td align="right">
+                                        <button class="btn btn-success btn-sm" type="submit">+</button>
+                                    </td>
+
+
+                                </form>
+                            </div>
+                            <div th:if="${item.getCategories().contains(cat)}">
+                                <form th:action="@{'/assignCategoriesDelete'}" method="post">
+                                    <input type="hidden" name="item_id" th:value="${item.getId()}">
+                                    <input type="hidden" name="cat_id" th:value="${cat.getId()}">
+                                    <td style="width: 200px">
+                                        <label th:text="${cat.getName()}">
+                                        </label>
+                                    </td>
+
+                                    <td style="width: 300px;">
+                                        <label th:text="${cat.getLogoUrl()}">
+                                        </label>
+                                    </td>
+
+
+                                    <td align="right">
+                                        <button class="btn btn-danger btn-sm" type="submit">-</button>
+                                    </td>
+
+
+                                </form>
+                            </div>
+                        </tr>
+
+                    </table>
+                </div>
+
+
+                <!--DELETE-->
+                <form th:action="@{'/deleteitem'}" method="post">
+                    <input type="hidden" name="id" th:value="${item.getId()}">
+                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h5>Do you really want to delete it?</h5>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                            th:text="#{button.close}"></button>
+                                    <button type="submit" class="btn btn-danger" th:text="#{button.delete}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+                <!--  Add Picture-->
+                <div id="picturesDiv">
+                    <h2>Pictures</h2>
+                    <table class="table table-hover">
+                        <thead>
+
+                        <td style="width: 100px">
+                            <label> Picture
+                            </label>
+                        </td>
+
+                        <td style="width: 400px;">
+                            <label> URL
+                            </label>
+                        </td>
+
+                        <td style="width: 200px;">
+                            <label> Added Date
+                            </label>
+                        </td>
+
+
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="pic : ${pictures}">
+
+
+                            <div th:if="${pic.getItem().getId().equals(item.getId())}">
+                                <form th:action="@{'/deletePictureFromItem'}" method="post">
+                                    <input type="hidden" name="pic_id" th:value="${pic.getId()}">
+                                    <input type="hidden" name="item_id" th:value="${item.getId()}">
+
+                                    <td style="width: 100px">
+                                        <img th:src="@{'/viewItemPicture/' + ${pic.getUrl()}}" class="my-1"
+                                             style="width: 100%;">
+                                    </td>
+
+                                    <td style="width: 400px;">
+                                        <label th:text="${pic.getUrl()}">
+
+                                        </label>
+                                    </td>
+
+                                    <td style="width: 200px;">
+                                        <label th:text="${pic.getAddedDate()}"></label>
+                                    </td>
+
+
+                                    <td align="right">
+                                        <button class="btn btn-danger btn-sm" type="submit">-</button>
+                                    </td>
+
+                                </form>
+                            </div>
+
+                        </tr>
+                        <tr>
+                            <div>
+
+                                <td style="width: 100px">
+
+                                </td>
+
+                                <td style="width: 400px;">
+
+                                </td>
+
+                                <td style="width: 200px;">
+
+                                </td>
+
+
+                                <td align="right">
+                                    <button class="btn btn-success btn-sm" type="button" data-toggle="modal"
+                                            data-target="#addPicture">+
+                                    </button>
+                                </td>
+
+
+                                <div class="modal fade" id="addPicture" tabindex="-1"
+                                     aria-labelledby="exampleModalLabel2"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel2">Add Picture</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form th:action="@{'/addPictureToItem'}" method="post"
+                                                  enctype="multipart/form-data">
+
+
+                                                <div class="custom-file">
+                                                    <input type="hidden" name="item_id" th:value="${item.getId()}">
+                                                    <input type="file" class="custom-file-input" id="customFile"
+                                                           name="item_picture">
+                                                    <label class="custom-file-label" for="customFile">Choose
+                                                        File</label>
+                                                </div>
+
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                                            th:text="#{button.close}">Close
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary"
+                                                    >Upload File
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</html>

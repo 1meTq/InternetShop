@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: black" xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+    <a class="navbar-brand" th:href="@{'/'}">
+        <strong style="color: whitesmoke; padding-left: 140px"><i class="fab fa-artstation"></i> ALL E-SHOP</strong>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{'/adminpanel'}"  style="color: whitesmoke">Admin panel</a>
+            </li>
+
+            <li class="nav-item active" sec:authorize="isAuthenticated()">
+                <a class="nav-link" th:href="@{'/profile'}" style="color: whitesmoke" th:text="${currentUser.getFullName()}"></a>
+            </li>
+
+            <li class="nav-item active" sec:authorize="isAnonymous()">
+                <a class="nav-link" th:href="@{'/login'}" style="color: whitesmoke" th:text="#{label.login}"></a>
+            </li>
+
+            <li class="nav-item active" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="JavaScript:void(0)" style="color: whitesmoke" onclick=document.getElementById('logoutFormId').submit() >Logout</a>
+            </li>
+
+
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+
+            <a class="nav-link" href="?lng=ru" style="color: whitesmoke" th:text="#{langy.ru}"></a>
+
+            <a class="nav-link" href="?lng=en" style="color: whitesmoke" th:text="#{langy.en}"></a>
+
+            <a class="nav-link" href="?lng=kz" style="color: whitesmoke" th:text="#{langy.kz}"></a>
+
+
+
+
+        </form>
+
+        <form th:action="@{'/logout'}" method="post" id="logoutFormId" sec:authorize="isAuthenticated()">
+
+        </form>
+
+    </div>
+</nav>
